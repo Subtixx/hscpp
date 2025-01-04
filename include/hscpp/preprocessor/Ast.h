@@ -8,7 +8,6 @@
 namespace hscpp
 {
     struct Stmt;
-    struct Expr;
 
     struct BlockStmt;
     struct IncludeStmt;
@@ -42,6 +41,12 @@ namespace hscpp
         virtual void Visit(const StringLiteralExpr& stringLiteralExpr) = 0;
         virtual void Visit(const NumberLiteralExpr& numberLiteralExpr) = 0;
         virtual void Visit(const BoolLiteralExpr& boolLiteralExpr) = 0;
+    };
+
+    struct Expr
+    {
+        virtual ~Expr() = default;
+        virtual void Accept(IAstVisitor& visitor) const = 0;
     };
 
     struct Stmt
@@ -98,12 +103,6 @@ namespace hscpp
         void Accept(IAstVisitor& visitor) const override;
 
         std::string message;
-    };
-
-    struct Expr
-    {
-        virtual ~Expr() = default;
-        virtual void Accept(IAstVisitor& visitor) const = 0;
     };
 
     struct NameExpr : public Expr
