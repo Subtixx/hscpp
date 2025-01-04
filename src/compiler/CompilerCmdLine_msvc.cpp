@@ -46,24 +46,24 @@ namespace hscpp
         }
 
         // Output dll name.
-        command << "/Fe" << "\"" << moduleFilePath.u8string() << "\"" << std::endl;
+        command << "/Fe" << "\"" << moduleFilePath.string() << "\"" << std::endl;
 
         // Object file output directory. Trailing slash is required.
-        command << "/Fo" << "\"" << input.buildDirectoryPath.u8string() << "\"\\" << std::endl;
+        command << "/Fo" << "\"" << input.buildDirectoryPath.string() << "\"\\" << std::endl;
 
         for (const auto& includeDirectory : input.includeDirectoryPaths)
         {
-            command << "/I " << "\"" << includeDirectory.u8string() << "\"" << std::endl;
+            command << "/I " << "\"" << includeDirectory.string() << "\"" << std::endl;
         }
 
         for (const auto& file : input.sourceFilePaths)
         {
-            command << "\"" << file.u8string() << "\"" << std::endl;
+            command << "\"" << file.string() << "\"" << std::endl;
         }
 
         for (const auto& library : input.libraryPaths)
         {
-            command << "\"" << library.u8string() << "\"" << std::endl;
+            command << "\"" << library.string() << "\"" << std::endl;
         }
 
         for (const auto& preprocessorDefinition : input.preprocessorDefinitions)
@@ -73,7 +73,7 @@ namespace hscpp
 
         for (const auto& libraryDirectory : input.libraryDirectoryPaths)
         {
-            command << "/link " << "/LIBPATH:" << "\"" << libraryDirectory.u8string() << "\"" << std::endl;
+            command << "/link " << "/LIBPATH:" << "\"" << libraryDirectory.string() << "\"" << std::endl;
         }
 
         for (const auto& option : input.linkOptions)
@@ -82,7 +82,7 @@ namespace hscpp
         }
 
         // Print effective command line.
-        log::Build() << m_pConfig->executable.u8string() << "\n" << command.str() << log::End();
+        log::Build() << m_pConfig->executable.string() << "\n" << command.str() << log::End();
 
         // Write command file.
         commandFile << command.str();

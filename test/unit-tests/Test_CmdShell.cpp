@@ -76,7 +76,7 @@ namespace hscpp { namespace test
         RunWin32([&](){ catExecutable = "type"; });
         RunUnix([&](){ catExecutable = "cat"; });
 
-        std::string cmd = catExecutable + " \"" + catFilePath.u8string() + "\"";
+        std::string cmd = catExecutable + " \"" + catFilePath.string() + "\"";
         int taskId = 0;
         pCmdShell->StartTask(cmd, taskId);
 

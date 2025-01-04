@@ -81,7 +81,7 @@ namespace hscpp
 
                 for (const auto& include : result.includePaths)
                 {
-                    fs::path includePath = fs::u8path(include);
+                    fs::path includePath = fs::path(include);
                     for (const auto& includeDirectoryPath : includeDirectoryPaths)
                     {
                         // For example, the includePath may be "MathUtil.h", but we want to find the
@@ -175,7 +175,7 @@ namespace hscpp
 
     bool Preprocessor::Process(const fs::path& filePath, Interpreter::Result& result)
     {
-        std::ifstream ifs(filePath.u8string());
+        std::ifstream ifs(filePath.string());
         if (!ifs.is_open())
         {
             log::Error() << HSCPP_LOG_PREFIX << "Failed to open file "
@@ -223,7 +223,7 @@ namespace hscpp
                 case HscppRequire::Type::LibraryDir:
                 {
                     // If path is relative, it should be relative to the path of the source file.
-                    fs::path path = fs::u8path(value);
+                    fs::path path = fs::path(value);
 
                     fs::path fullPath;
                     if (path.is_relative())

@@ -78,7 +78,7 @@ namespace hscpp
         m_CompiledModulePath.clear();
         m_CompilingModulePath = moduleFilePath;
 
-        std::string cmd = "\"" + m_pConfig->executable.u8string() + "\" @\"" + input.buildDirectoryPath.u8string()
+        std::string cmd = "\"" + m_pConfig->executable.string() + "\" @\"" + input.buildDirectoryPath.string()
                 + "/" + COMMAND_FILENAME + "\"";
 
         m_pCmdShell->StartTask(cmd, static_cast<int>(CompilerTask::Build));

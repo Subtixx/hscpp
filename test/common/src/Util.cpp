@@ -93,7 +93,7 @@ namespace hscpp { namespace test
     {
         REQUIRE(fs::exists(filePath));
 
-        std::ifstream ifs(filePath.u8string());
+        std::ifstream ifs(filePath.string());
         REQUIRE(ifs.is_open());
 
         std::stringstream ss;

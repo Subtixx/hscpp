@@ -21,7 +21,7 @@ namespace hscpp
         m_StartTime = std::chrono::steady_clock::now();
         m_Timeout = timeout;
 
-        std::string versionCmd = "\"" + m_pConfig->executable.u8string() + "\" --version";
+        std::string versionCmd = "\"" + m_pConfig->executable.string() + "\" --version";
         m_pCmdShell->StartTask(versionCmd, static_cast<int>(CompilerTask::GetVersion));
     }
 
@@ -92,7 +92,7 @@ namespace hscpp
         if (output.empty())
         {
             log::Error() << HSCPP_LOG_PREFIX << "Failed to get version for compiler '"
-                << m_pConfig->executable.u8string() << log::End("'.");
+                << m_pConfig->executable.string() << log::End("'.");
 
             TriggerDoneCb(Result::Failure);
             return;
@@ -134,7 +134,7 @@ namespace hscpp
         if (!bValidVersion)
         {
             log::Error() << HSCPP_LOG_PREFIX << "Failed to get version for compiler '"
-                << m_pConfig->executable.u8string() << log::End("'.");
+                << m_pConfig->executable.string() << log::End("'.");
 
             TriggerDoneCb(Result::Failure);
             return;

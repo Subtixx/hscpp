@@ -40,7 +40,7 @@ int main()
     swapper.SetVar("os", "Posix");
 #endif
 
-    swapper.SetVar("libDirectory", HSCPP_EXAMPLE_UTILS_BUILD_PATH.u8string());
+    swapper.SetVar("libDirectory", HSCPP_EXAMPLE_UTILS_BUILD_PATH.string());
 
     // This definition is defined in this projects CMakeLists.txt. We must also add it to the
     // hscpp::Hotswapper if we want newly compiled modules to use the definition.

@@ -1788,9 +1788,9 @@ GHC_INLINE void create_symlink(const path& target_name, const path& new_symlink,
 #pragma GCC diagnostic pop
 #endif
     if (api_call) {
-        if (api_call(detail::fromUtf8<std::wstring>(new_symlink.u8string()).c_str(), detail::fromUtf8<std::wstring>(target_name.u8string()).c_str(), to_directory ? 1 : 0) == 0) {
+        if (api_call(detail::fromUtf8<std::wstring>(new_symlink.string()).c_str(), detail::fromUtf8<std::wstring>(target_name.string()).c_str(), to_directory ? 1 : 0) == 0) {
             auto result = ::GetLastError();
-            if (result == ERROR_PRIVILEGE_NOT_HELD && api_call(detail::fromUtf8<std::wstring>(new_symlink.u8string()).c_str(), detail::fromUtf8<std::wstring>(target_name.u8string()).c_str(), to_directory ? 3 : 2) != 0) {
+            if (result == ERROR_PRIVILEGE_NOT_HELD && api_call(detail::fromUtf8<std::wstring>(new_symlink.string()).c_str(), detail::fromUtf8<std::wstring>(target_name.string()).c_str(), to_directory ? 3 : 2) != 0) {
                 return;
             }
             ec = detail::make_system_error(result);
@@ -1812,7 +1812,7 @@ GHC_INLINE void create_hardlink(const path& target_name, const path& new_hardlin
 #pragma GCC diagnostic pop
 #endif
     if (api_call) {
-        if (api_call(detail::fromUtf8<std::wstring>(new_hardlink.u8string()).c_str(), detail::fromUtf8<std::wstring>(target_name.u8string()).c_str(), NULL) == 0) {
+        if (api_call(detail::fromUtf8<std::wstring>(new_hardlink.string()).c_str(), detail::fromUtf8<std::wstring>(target_name.string()).c_str(), NULL) == 0) {
             ec = detail::make_system_error();
         }
     }
@@ -2043,7 +2043,7 @@ GHC_INLINE file_status symlink_status_ex(const path& p, std::error_code& ec, uin
 #ifdef GHC_OS_WINDOWS
     file_status fs;
     WIN32_FILE_ATTRIBUTE_DATA attr;
-    if (!GetFileAttributesExW(detail::fromUtf8<std::wstring>(p.u8string()).c_str(), GetFileExInfoStandard, &attr)) {
+    if (!GetFileAttributesExW(detail::fromUtf8<std::wstring>(p.string()).c_str(), GetFileExInfoStandard, &attr)) {
         ec = detail::make_system_error();
     }
     else {
@@ -3181,7 +3181,7 @@ GHC_INLINE filesystem_error::filesystem_error(const std::string& what_arg, const
     , _p1(p1)
 {
     if (!_p1.empty()) {
-        _what_arg += ": '" + _p1.u8string() + "'";
+        _what_arg += ": '" + _p1.string() + "'";
     }
 }
 
@@ -3193,10 +3193,10 @@ GHC_INLINE filesystem_error::filesystem_error(const std::string& what_arg, const
     , _p2(p2)
 {
     if (!_p1.empty()) {
-        _what_arg += ": '" + _p1.u8string() + "'";
+        _what_arg += ": '" + _p1.string() + "'";
     }
     if (!_p2.empty()) {
-        _what_arg += ", '" + _p2.u8string() + "'";
+        _what_arg += ", '" + _p2.string() + "'";
     }
 }
 
@@ -3512,7 +3512,7 @@ GHC_INLINE bool copy_file(const path& from, const path& to, copy_options options
         overwrite = true;
     }
 #ifdef GHC_OS_WINDOWS
-    if (!::CopyFileW(detail::fromUtf8<std::wstring>(from.u8string()).c_str(), detail::fromUtf8<std::wstring>(to.u8string()).c_str(), !overwrite)) {
+    if (!::CopyFileW(detail::fromUtf8<std::wstring>(from.string()).c_str(), detail::fromUtf8<std::wstring>(to.string()).c_str(), !overwrite)) {
         ec = detail::make_system_error();
         return false;
     }
@@ -3674,12 +3674,12 @@ GHC_INLINE bool create_directory(const path& p, const path& attributes, std::err
 #endif
 #ifdef GHC_OS_WINDOWS
     if (!attributes.empty()) {
-        if (!::CreateDirectoryExW(detail::fromUtf8<std::wstring>(attributes.u8string()).c_str(), detail::fromUtf8<std::wstring>(p.u8string()).c_str(), NULL)) {
+        if (!::CreateDirectoryExW(detail::fromUtf8<std::wstring>(attributes.string()).c_str(), detail::fromUtf8<std::wstring>(p.string()).c_str(), NULL)) {
             ec = detail::make_system_error();
             return false;
         }
     }
-    else if (!::CreateDirectoryW(detail::fromUtf8<std::wstring>(p.u8string()).c_str(), NULL)) {
+    else if (!::CreateDirectoryW(detail::fromUtf8<std::wstring>(p.string()).c_str(), NULL)) {
         ec = detail::make_system_error();
         return false;
     }
@@ -3800,7 +3800,7 @@ GHC_INLINE void current_path(const path& p, std::error_code& ec) noexcept
 {
     ec.clear();
 #ifdef GHC_OS_WINDOWS
-    if (!::SetCurrentDirectoryW(detail::fromUtf8<std::wstring>(p.u8string()).c_str())) {
+    if (!::SetCurrentDirectoryW(detail::fromUtf8<std::wstring>(p.string()).c_str())) {
         ec = detail::make_system_error();
     }
 #else
@@ -3907,7 +3907,7 @@ GHC_INLINE uintmax_t file_size(const path& p, std::error_code& ec) noexcept
     ec.clear();
 #ifdef GHC_OS_WINDOWS
     WIN32_FILE_ATTRIBUTE_DATA attr;
-    if (!GetFileAttributesExW(detail::fromUtf8<std::wstring>(p.u8string()).c_str(), GetFileExInfoStandard, &attr)) {
+    if (!GetFileAttributesExW(detail::fromUtf8<std::wstring>(p.string()).c_str(), GetFileExInfoStandard, &attr)) {
         ec = detail::make_system_error();
         return static_cast<uintmax_t>(-1);
     }
@@ -4364,7 +4364,7 @@ GHC_INLINE bool remove(const path& p, std::error_code& ec) noexcept
 {
     ec.clear();
 #ifdef GHC_OS_WINDOWS
-    std::wstring np = detail::fromUtf8<std::wstring>(p.u8string());
+    std::wstring np = detail::fromUtf8<std::wstring>(p.string());
     DWORD attr = GetFileAttributesW(np.c_str());
     if (attr == INVALID_FILE_ATTRIBUTES) {
         auto error = ::GetLastError();
@@ -4470,7 +4470,7 @@ GHC_INLINE void rename(const path& from, const path& to, std::error_code& ec) no
     ec.clear();
 #ifdef GHC_OS_WINDOWS
     if (from != to) {
-        if (!MoveFileExW(detail::fromUtf8<std::wstring>(from.u8string()).c_str(), detail::fromUtf8<std::wstring>(to.u8string()).c_str(), (DWORD)MOVEFILE_REPLACE_EXISTING)) {
+        if (!MoveFileExW(detail::fromUtf8<std::wstring>(from.string()).c_str(), detail::fromUtf8<std::wstring>(to.string()).c_str(), (DWORD)MOVEFILE_REPLACE_EXISTING)) {
             ec = detail::make_system_error();
         }
     }
@@ -4508,7 +4508,7 @@ GHC_INLINE void resize_file(const path& p, uintmax_t size, std::error_code& ec) 
 #endif
         return;
     }
-    std::shared_ptr<void> file(CreateFileW(detail::fromUtf8<std::wstring>(p.u8string()).c_str(), GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL), CloseHandle);
+    std::shared_ptr<void> file(CreateFileW(detail::fromUtf8<std::wstring>(p.string()).c_str(), GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL), CloseHandle);
     if (file.get() == INVALID_HANDLE_VALUE) {
         ec = detail::make_system_error();
     }
@@ -4541,7 +4541,7 @@ GHC_INLINE space_info space(const path& p, std::error_code& ec) noexcept
     ULARGE_INTEGER freeBytesAvailableToCaller = {{0, 0}};
     ULARGE_INTEGER totalNumberOfBytes = {{0, 0}};
     ULARGE_INTEGER totalNumberOfFreeBytes = {{0, 0}};
-    if (!GetDiskFreeSpaceExW(detail::fromUtf8<std::wstring>(p.u8string()).c_str(), &freeBytesAvailableToCaller, &totalNumberOfBytes, &totalNumberOfFreeBytes)) {
+    if (!GetDiskFreeSpaceExW(detail::fromUtf8<std::wstring>(p.string()).c_str(), &freeBytesAvailableToCaller, &totalNumberOfBytes, &totalNumberOfFreeBytes)) {
         ec = detail::make_system_error();
         return {static_cast<uintmax_t>(-1), static_cast<uintmax_t>(-1), static_cast<uintmax_t>(-1)};
     }
@@ -5095,7 +5095,7 @@ public:
     {
         if (!_base.empty()) {
             ZeroMemory(&_findData, sizeof(WIN32_FIND_DATAW));
-            if ((_dirHandle = FindFirstFileW(detail::fromUtf8<std::wstring>((_base / "*").u8string()).c_str(), &_findData)) != INVALID_HANDLE_VALUE) {
+            if ((_dirHandle = FindFirstFileW(detail::fromUtf8<std::wstring>((_base / "*").string()).c_str(), &_findData)) != INVALID_HANDLE_VALUE) {
                 if (std::wstring(_findData.cFileName) == L"." || std::wstring(_findData.cFileName) == L"..") {
                     increment(_ec);
                 }

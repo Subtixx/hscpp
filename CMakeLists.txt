@@ -194,10 +194,10 @@ else()
     message(WARNING "Compiler is not officially supported.")
 endif()
 
-# Determine C++ version to use. Default to C++17 if not defined.
+# Determine C++ version to use. Default to C++20 if not defined.
 if(NOT DEFINED CMAKE_CXX_STANDARD)
     # Set C++17 as default build target.
-    set(CMAKE_CXX_STANDARD 17)
+    set(CMAKE_CXX_STANDARD 20)
     set(CMAKE_CXX_STANDARD_REQUIRED ON)
     set(CMAKE_CXX_EXTENSIONS OFF)
 elseif(CMAKE_CXX_STANDARD LESS 11)

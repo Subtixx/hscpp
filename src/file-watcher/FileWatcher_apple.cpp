@@ -218,7 +218,7 @@ namespace hscpp
             for (const auto& directoryPath : rootDirectories)
             {
                 CFStringRef cfDirectoryPath = CFStringCreateWithCString(nullptr,
-                        directoryPath.u8string().c_str(), kCFStringEncodingUTF8);
+                        directoryPath.string().c_str(), kCFStringEncodingUTF8);
 
                 cfDirectoryPaths.push_back(cfDirectoryPath);
             }

@@ -1,6 +1,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <poll.h>
+#include <algorithm>
 
 #include "hscpp/file-watcher/FileWatcher_unix.h"
 #include "hscpp/Log.h"
@@ -42,7 +43,7 @@ namespace hscpp
         }
 
         int mask = IN_CREATE | IN_DELETE | IN_MODIFY | IN_MOVED_FROM | IN_MOVED_TO;
-        int wd = inotify_add_watch(m_NotifyFd, directoryPath.u8string().c_str(), mask);
+        int wd = inotify_add_watch(m_NotifyFd, directoryPath.string().c_str(), mask);
         if (wd == -1)
         {
             log::Error() << HSCPP_LOG_PREFIX << "Failed to add directory "
@@ -164,7 +165,7 @@ namespace hscpp
         fs::path directoryPath = m_DirectoryPathsByWd[pNotifyEvent->wd];
 
         Event event;
-        event.filePath = directoryPath / fs::u8path(pNotifyEvent->name);
+        event.filePath = directoryPath / fs::path(pNotifyEvent->name);
 
         if (pNotifyEvent->mask & IN_CREATE
             || pNotifyEvent->mask & IN_MOVED_TO

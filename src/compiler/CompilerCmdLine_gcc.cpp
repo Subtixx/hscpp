@@ -16,7 +16,7 @@ namespace hscpp
                                                   const fs::path& moduleFilePath,
                                                   const ICompiler::Input &input)
     {
-        std::ofstream commandFile(commandFilePath.u8string().c_str());
+        std::ofstream commandFile(commandFilePath.string().c_str());
         std::stringstream command;
 
         if (!commandFile.is_open())
@@ -30,7 +30,7 @@ namespace hscpp
         // with the Windows variants in cmdfiles, even on a Win32 platform.
 
         // Output module name.
-        command << "-o " << util::UnixSlashes(moduleFilePath.u8string()) << std::endl;
+        command << "-o " << util::UnixSlashes(moduleFilePath.string()) << std::endl;
 
         for (const auto& option : input.compileOptions)
         {
@@ -49,33 +49,33 @@ namespace hscpp
 
         for (const auto& includeDirectory : input.includeDirectoryPaths)
         {
-            command << "-I " << "\"" << util::UnixSlashes(includeDirectory.u8string()) << "\"" << std::endl;
+            command << "-I " << "\"" << util::UnixSlashes(includeDirectory.string()) << "\"" << std::endl;
         }
 
         for (const auto& libraryDirectory : input.libraryDirectoryPaths)
         {
-            command << "-L " << "\"" << util::UnixSlashes(libraryDirectory.u8string()) << "\"" << std::endl;
+            command << "-L " << "\"" << util::UnixSlashes(libraryDirectory.string()) << "\"" << std::endl;
         }
 
         for (const auto& library : input.libraryPaths)
         {
             if (library.parent_path().empty())
             {
-                command << "-l " << "\"" << library.filename().u8string() << "\"" << std::endl;
+                command << "-l " << "\"" << library.filename().string() << "\"" << std::endl;
             }
             else
             {
-                command << "\"" << util::UnixSlashes(library.u8string()) << "\"" << std::endl;
+                command << "\"" << util::UnixSlashes(library.string()) << "\"" << std::endl;
             }
         }
 
         for (const auto& file : input.sourceFilePaths)
         {
-            command << "\"" << util::UnixSlashes(file.u8string()) << "\"" << std::endl;
+            command << "\"" << util::UnixSlashes(file.string()) << "\"" << std::endl;
         }
 
         // Print effective command line.
-        log::Build() << m_pConfig->executable.u8string() << "\n" << command.str() << log::End();
+        log::Build() << m_pConfig->executable.string() << "\n" << command.str() << log::End();
 
         // Write command file.
         commandFile << command.str();
